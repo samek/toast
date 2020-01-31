@@ -3,9 +3,8 @@ package rsa
 import (
 	"bytes"
 	"crypto"
-
 	"errors"
-	"github.com/Sirupsen/logrus"
+	"log"
 )
 
 type Cipher interface {
@@ -32,7 +31,7 @@ func (cipher *cipher) Encrypt(plainText []byte) ([]byte, error) {
 	for _, plainTextBlock := range groups {
 		cipherText, err := cipher.cipherMode.Encrypt(plainTextBlock, cipher.key.PublicKey())
 		if err != nil {
-			logrus.Error(err)
+			log.Println(err)
 			return nil, err
 		}
 		buffer.Write(cipherText)
@@ -52,7 +51,7 @@ func (cipher *cipher) Decrypt(cipherText []byte) ([]byte, error) {
 	for _, cipherTextBlock := range groups {
 		plainText, err := cipher.cipherMode.Decrypt(cipherTextBlock, cipher.key.PrivateKey())
 		if err != nil {
-			logrus.Error(err)
+			log.Println(err)
 			return nil, err
 		}
 		buffer.Write(plainText)
